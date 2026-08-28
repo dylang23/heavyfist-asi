@@ -1,0 +1,28 @@
+name: Compilar HeavyFist ASI
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+    - name: Descargar codigo
+      uses: actions/checkout@v4
+
+    - name: Configurar CMake y MSVC (x86)
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x86
+
+    - name: Configurar Proyecto
+      run: cmake -B build -A Win32
+
+    - name: Compilar
+      run: cmake --build build --config Release
+
+    - name: Subir archivo ASI
+      uses: actions/upload-artifact@v4
+      with:
+        name: HeavyFist
+        path: build/Release/HeavyFist.asi
